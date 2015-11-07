@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Nearable;
@@ -100,6 +101,9 @@ public class MainActivity extends AppCompatActivity {
                 for(Nearable nearable : nearables) {
                     if (STICKERS.contains(nearable.identifier)) {
                         tv.setText(nearable.toString());
+                        if(nearable.isMoving) {
+                            Toast.makeText(getApplicationContext(), nearable.identifier + "is moving!", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             }
@@ -108,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
         beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
             @Override
             public void onServiceReady() {
+                beaconManager.setForegroundScanPeriod(100, 0);
                 beaconManager.startNearableDiscovery();
             }
         });
