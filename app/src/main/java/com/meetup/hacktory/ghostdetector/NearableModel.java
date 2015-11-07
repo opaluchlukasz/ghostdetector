@@ -41,4 +41,19 @@ public class NearableModel {
     public final BroadcastingPower power;
     public final Region region;
     public final long timestamp;
+
+    @Override
+    public String toString() {
+        return "identifier='" + identifier + '\'' +
+                ", temperature=" + temperature +
+                ", rssi=" + rssi +
+                ", isMoving=" + isMoving +
+                ", xAcceleration=" + xAcceleration +
+                ", yAcceleration=" + yAcceleration +
+                ", zAcceleration=" + zAcceleration +
+                ", orientation=" + orientation +
+                ", currentMotionStateDuration=" + currentMotionStateDuration +
+                ", lastMotionStateDuration=" + lastMotionStateDuration +
+                ", power=" + power;
+    }
 }
