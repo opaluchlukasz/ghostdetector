@@ -14,7 +14,7 @@ import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Nearable;
 import com.estimote.sdk.SystemRequirementsChecker;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,7 +22,12 @@ public class MainActivity extends AppCompatActivity {
     private BeaconManager beaconManager;
     private TextView tv;
 
-    private String[] stickers = new String[] {""};
+    /*
+     * 49b55e37ca533f56 - yellow
+     * b3735f8fb8b79289 - green
+     * 8cbaff04dd11e9e8 - blue
+     */
+    private List<String> STICKERS = Arrays.asList("49b55e37ca533f56", "b3735f8fb8b79289", "8cbaff04dd11e9e8");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +98,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onNearablesDiscovered(List<Nearable> nearables) {
                 for(Nearable nearable : nearables) {
-                    tv.setText(nearable.identifier);                }
+                    if (STICKERS.contains(nearable.identifier)) {
+                        tv.setText(nearable.toString());
+                    }
+                }
             }
         });
 
