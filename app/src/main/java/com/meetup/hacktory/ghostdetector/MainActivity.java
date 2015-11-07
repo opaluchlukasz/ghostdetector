@@ -1,10 +1,12 @@
 package com.meetup.hacktory.ghostdetector;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,8 +17,14 @@ import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Nearable;
 import com.estimote.sdk.SystemRequirementsChecker;
 
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
      * 8cbaff04dd11e9e8 - blue
      */
     private List<String> STICKERS = Arrays.asList("49b55e37ca533f56", "b3735f8fb8b79289", "8cbaff04dd11e9e8");
+    private RestTemplate restTemplate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +58,10 @@ public class MainActivity extends AppCompatActivity {
         tv = (TextView) findViewById(R.id.beacon);
 
         beaconManager = new BeaconManager(this);
+
+        restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+        restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
     }
 
     @Override
@@ -101,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 for(Nearable nearable : nearables) {
                     if (STICKERS.contains(nearable.identifier)) {
                         tv.setText(nearable.toString());
+                        new SendInfoAsyncTask().execute(nearable);
                         if(nearable.isMoving) {
                             Toast.makeText(getApplicationContext(), nearable.identifier + "is moving!", Toast.LENGTH_SHORT).show();
                         }
@@ -116,5 +130,19 @@ public class MainActivity extends AppCompatActivity {
                 beaconManager.startNearableDiscovery();
             }
         });
+    }
+
+    class SendInfoAsyncTask extends AsyncTask<Nearable, Void, Object> {
+        @Override
+        protected Object doInBackground(Nearable... nearable) {
+            if(nearable.length > 0) {
+                try {
+                    return restTemplate.postForEntity("http://f180eab4.ngrok.io", new NearableModel(nearable[0]), Object.class, Collections.EMPTY_MAP);
+                } catch (Exception e) {
+                    Log.e(MainActivity.class.getName(), "exception", e);
+                }
+            }
+            return null;
+        }
     }
 }
