@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="4" by="lint 24.4.1">
+
+    <issue
+        id="GradleDependency"
+        severity="Warning"
+        message="Old buildToolsVersion 23.0.1; recommended version is 23.0.2 or later"
+        category="Correctness"
+        priority="4"
+        summary="Obsolete Gradle Dependency"
+        explanation="This detector looks for usages of libraries where the version you are using is not the current stable release. Using older versions is fine, and there are cases where you deliberately want to stick with an older version. However, you may simply not be aware that a more recent version is available, and that is what this lint check helps find."
+        errorLine1="    buildToolsVersion &quot;23.0.1&quot;"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        quickfix="studio">
+        <location
+            file="/Users/lukasz.opaluch/Documents/Dev/hacktory/Ghostdetector10T/app/build.gradle"
+            line="5"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        severity="Warning"
+        message="The resource `@attr/actionBarSize` is marked as private in com.android.support:design"
+        category="Correctness"
+        priority="3"
+        summary="Using private resources"
+        explanation="Private resources should not be referenced; the may not be present everywhere, and even where they are they may disappear without notice.
+
+To fix this, copy the resource into your own project instead."
+        errorLine1="            android:layout_width=&quot;match_parent&quot; android:layout_height=&quot;?attr/actionBarSize&quot;"
+        errorLine2="                                                                       ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/Users/lukasz.opaluch/Documents/Dev/hacktory/Ghostdetector10T/app/src/main/res/layout/activity_main.xml"
+            line="13"
+            column="72"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        severity="Warning"
+        message="The resource `@attr/colorPrimary` is marked as private in com.android.support:design"
+        category="Correctness"
+        priority="3"
+        summary="Using private resources"
+        explanation="Private resources should not be referenced; the may not be present everywhere, and even where they are they may disappear without notice.
+
+To fix this, copy the resource into your own project instead."
+        errorLine1="            android:background=&quot;?attr/colorPrimary&quot; app:popupTheme=&quot;@style/AppTheme.PopupOverlay&quot; />"
+        errorLine2="                                ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/Users/lukasz.opaluch/Documents/Dev/hacktory/Ghostdetector10T/app/src/main/res/layout/activity_main.xml"
+            line="14"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="AllowBackup"
+        severity="Warning"
+        message="Should explicitly set `android:fullBackupContent` to `true` or `false` to opt-in to or out of full app data back-up and restore, or alternatively to an `@xml` resource which specifies which files to backup"
+        category="Security"
+        priority="3"
+        summary="Missing `allowBackup` attribute"
+        explanation="The allowBackup attribute determines if an application&apos;s data can be backed up and restored. It is documented at http://developer.android.com/reference/android/R.attr.html#allowBackup
+
+By default, this flag is set to `true`. When this flag is set to `true`, application data can be backed up and restored by the user using `adb backup` and `adb restore`.
+
+This may have security consequences for an application. `adb backup` allows users who have enabled USB debugging to copy application data off of the device. Once backed up, all application data can be read by the user. `adb restore` allows creation of application data from a source specified by the user. Following a restore, applications should not assume that the data, file permissions, and directory permissions were created by the application itself.
+
+Setting `allowBackup=&quot;false&quot;` opts an application out of both backup and restore.
+
+To fix this warning, decide whether your application should support backup, and explicitly set `android:allowBackup=(true|false)&quot;`"
+        url="http://developer.android.com/reference/android/R.attr.html#allowBackup"
+        urls="http://developer.android.com/reference/android/R.attr.html#allowBackup"
+        errorLine1="    &lt;application"
+        errorLine2="    ^"
+        quickfix="studio,adt">
+        <location
+            file="/Users/lukasz.opaluch/Documents/Dev/hacktory/Ghostdetector10T/app/src/main/AndroidManifest.xml"
+            line="5"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        severity="Warning"
+        message="[I18N] Hardcoded string &quot;Scanning...&quot;, should use `@string` resource"
+        category="Internationalization"
+        priority="5"
+        summary="Hardcoded text"
+        explanation="Hardcoding text attributes directly in layout files is bad for several reasons:
+
+* When creating configuration variations (for example for landscape or portrait)you have to repeat the actual text (and keep it up to date when making changes)
+
+* The application cannot be translated to other languages by just adding new translations for existing string resources.
+
+In Android Studio and Eclipse there are quickfixes to automatically extract this hardcoded string into a resource lookup."
+        errorLine1="    &lt;TextView android:id=&quot;@+id/beacon&quot; android:text=&quot;Scanning...&quot; android:layout_width=&quot;wrap_content&quot;"
+        errorLine2="                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        quickfix="adt">
+        <location
+            file="/Users/lukasz.opaluch/Documents/Dev/hacktory/Ghostdetector10T/app/src/main/res/layout/content_main.xml"
+            line="12"
+            column="40"/>
+    </issue>
+
+</issues>
