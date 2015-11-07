@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     private RestTemplate restTemplate;
     private BeaconManager beaconManager;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,9 +42,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        STICKERS_METADATA.put("49b55e37ca533f56", new StickerMetaData("yellow", (TextView) findViewById(R.id.yeallowsticker)));
-        STICKERS_METADATA.put("b3735f8fb8b79289", new StickerMetaData("green", (TextView) findViewById(R.id.greensticker)));
-        STICKERS_METADATA.put("8cbaff04dd11e9e8", new StickerMetaData("blue", (TextView) findViewById(R.id.bluesticker)));
+        STICKERS_METADATA.put("49b55e37ca533f56", new StickerMetaData("yellow", (TextView) findViewById(R.id.yeallowsticker), "Someone has just used your cup!"));
+        STICKERS_METADATA.put("b3735f8fb8b79289", new StickerMetaData("green", (TextView) findViewById(R.id.greensticker), "Someone is using your chair!"));
+        STICKERS_METADATA.put("8cbaff04dd11e9e8", new StickerMetaData("blue", (TextView) findViewById(R.id.bluesticker), "Someone has just eaten your last piece of pizza!"));
 
         beaconManager = new BeaconManager(this);
 
@@ -100,10 +99,12 @@ public class MainActivity extends AppCompatActivity {
                 for(Nearable nearable : nearables) {
                     if (STICKERS_METADATA.keySet().contains(nearable.identifier)) {
                         NearableModel nearableModel = new NearableModel(nearable);
-                        STICKERS_METADATA.get(nearableModel.identifier).textView.setText(nearableModel.toString());
                         new SendInfoAsyncTask().execute(nearableModel);
                         if(nearableModel.isMoving) {
-                            Toast.makeText(getApplicationContext(), STICKERS_METADATA.get(nearable.identifier).color + " sticker is moving!", Toast.LENGTH_SHORT).show();
+                            STICKERS_METADATA.get(nearableModel.identifier).textView.setText(STICKERS_METADATA.get(nearable.identifier).color + " sticker is moving!");
+                            Toast.makeText(getApplicationContext(), STICKERS_METADATA.get(nearable.identifier).message, Toast.LENGTH_SHORT).show();
+                        } else {
+                            STICKERS_METADATA.get(nearableModel.identifier).textView.setText(STICKERS_METADATA.get(nearable.identifier).color + " sticker is not moving");
                         }
                     }
                 }
@@ -117,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
     class SendInfoAsyncTask extends AsyncTask<NearableModel, Void, Object> {
         @Override
